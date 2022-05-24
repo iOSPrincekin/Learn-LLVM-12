@@ -18,6 +18,11 @@ llvm_install=${GIT_ROOT_DIR}/../${llvm_branch}
 llvm_install=${GIT_ROOT_DIR}/../llvmorg-12.0.0
 #llvm_install="${GIT_ROOT_DIR}/../llvmorg-13.0.0"
 
+BUILD_TYPE="Ninja"
+#BUILD_TYPE="Xcode"
+
+echo "BUILD_TYPE: ${BUILD_TYPE}" 
+
 if [ -d "${llvm_install}" ] 
 then
     echo "Directory ${llvm_install} exists." 
@@ -29,14 +34,27 @@ rm -rf ${llvm_install}
 mkdir build
 
 cd build
-cmake -G Ninja -DCMAKE_BUILD_TYPE=Release \
+
+
+if [ "$BUILD_TYPE" = "Ninja" ]; then 
+cmake -G $BUILD_TYPE -DCMAKE_BUILD_TYPE=Release \
 -DCMAKE_INSTALL_PREFIX=${llvm_install} \
 ${llvm_project}/llvm
 
 
-ninja
-ninja install
+ninja -j12
 
+ninja install
+elif [ "$BUILD_TYPE" = "Xcode" ]; then 
+
+cmake -G $BUILD_TYPE -DCMAKE_BUILD_TYPE=Release \
+-DCMAKE_INSTALL_PREFIX=${llvm_install} \
+${llvm_project}/llvm
+
+make -j12
+
+make install
+fi
 
 fi
 
@@ -51,14 +69,10 @@ rm -rf ${build_target_dir}
 rm -rf ${install_target_dir}
 mkdir ${build_target_dir}
 cd ${build_target_dir}
-echo "dir::${llvm_install}/lib/cmake/llvm"
-echo "xxx-::${llvm_install}"
 
 
-BUILD_TYPE="Ninja"
-#BUILD_TYPE="Xcode"
 
-echo "BUILD_TYPE: ${BUILD_TYPE}" 
+
 if [ "$BUILD_TYPE" = "Ninja" ]; then 
 cmake -G $BUILD_TYPE -DCMAKE_BUILD_TYPE=Release \
 -DLLVM_DIR=${llvm_install}/lib/cmake/llvm \
@@ -69,8 +83,9 @@ ninja
 
 ninja install
 elif [ "$BUILD_TYPE" = "Xcode" ]; then 
+
 cmake -G $BUILD_TYPE -DCMAKE_BUILD_TYPE=Release \
--DLLVM_DIR=${llvm_install}/lib/cmake/llvm \
+-DLLVM_DIR=/Users/lee/Desktop/Compiler/Learn_LLVM_12/Learn-LLVM-12/Chapter03/calc/build/lib/cmake/llvm \
 -DCMAKE_INSTALL_PREFIX=${install_target_dir} ../
 
 
