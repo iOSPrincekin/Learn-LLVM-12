@@ -1,6 +1,7 @@
-﻿cmake_minimum_required (VERSION 3.8)
+cmake_minimum_required (VERSION 3.8)
+set(CMAKE_CXX_STANDARD 17)
 
-project ("calc")
+project (calc)
 
 include(CheckIncludeFile)
 include(CheckIncludeFileCXX)
@@ -26,4 +27,4 @@ if(LLVM_COMPILER_IS_GCC_COMPATIBLE)
   endif()
 endif()
 
-add_subdirectory ("src")
+add_subdirectory (src)
