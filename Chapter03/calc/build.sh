@@ -88,10 +88,6 @@ cmake -G $BUILD_TYPE -DCMAKE_BUILD_TYPE=Release \
 -DLLVM_DIR=${llvm_install}/lib/cmake/llvm \
 -DCMAKE_INSTALL_PREFIX=${install_target_dir} ../
 
-
-make
-
-make install
 fi;
 
 
