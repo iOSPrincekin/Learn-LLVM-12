@@ -1,4 +1,4 @@
-add_executable (calc
+add_calc_tool(calc
   Calc.cpp
   CodeGen.cpp
   Lexer.cpp

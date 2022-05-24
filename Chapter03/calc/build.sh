@@ -54,7 +54,13 @@ cd ${build_target_dir}
 echo "dir::${llvm_install}/lib/cmake/llvm"
 echo "xxx-::${llvm_install}"
 
-cmake -G Ninja -DCMAKE_BUILD_TYPE=Release \
+
+BUILD_TYPE="Ninja"
+#BUILD_TYPE="Xcode"
+
+echo "BUILD_TYPE: ${BUILD_TYPE}" 
+if [ "$BUILD_TYPE" = "Ninja" ]; then 
+cmake -G $BUILD_TYPE -DCMAKE_BUILD_TYPE=Release \
 -DLLVM_DIR=${llvm_install}/lib/cmake/llvm \
 -DCMAKE_INSTALL_PREFIX=${install_target_dir} ../
 
@@ -62,5 +68,17 @@ cmake -G Ninja -DCMAKE_BUILD_TYPE=Release \
 ninja
 
 ninja install
+elif [ "$BUILD_TYPE" = "Xcode" ]; then 
+cmake -G $BUILD_TYPE -DCMAKE_BUILD_TYPE=Release \
+-DLLVM_DIR=${llvm_install}/lib/cmake/llvm \
+-DCMAKE_INSTALL_PREFIX=${install_target_dir} ../
+
+
+make
+
+make install
+fi;
+
+
 
 
