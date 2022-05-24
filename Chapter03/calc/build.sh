@@ -18,8 +18,8 @@ llvm_install=${GIT_ROOT_DIR}/../${llvm_branch}
 llvm_install=${GIT_ROOT_DIR}/../llvmorg-12.0.0
 #llvm_install="${GIT_ROOT_DIR}/../llvmorg-13.0.0"
 
-BUILD_TYPE="Ninja"
-#BUILD_TYPE="Xcode"
+#BUILD_TYPE="Ninja"
+BUILD_TYPE="Xcode"
 
 echo "BUILD_TYPE: ${BUILD_TYPE}" 
 
@@ -85,7 +85,7 @@ ninja install
 elif [ "$BUILD_TYPE" = "Xcode" ]; then 
 
 cmake -G $BUILD_TYPE -DCMAKE_BUILD_TYPE=Release \
--DLLVM_DIR=/Users/lee/Desktop/Compiler/Learn_LLVM_12/Learn-LLVM-12/Chapter03/calc/build/lib/cmake/llvm \
+-DLLVM_DIR=${llvm_install}/lib/cmake/llvm \
 -DCMAKE_INSTALL_PREFIX=${install_target_dir} ../
 
 
