@@ -40,7 +40,7 @@ ninja install
 
 fi
 
-build_target=cala
+build_target=calc
 
 
 cd ${BASEDIR}
