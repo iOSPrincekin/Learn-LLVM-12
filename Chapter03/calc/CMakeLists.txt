@@ -22,6 +22,9 @@ include(ChooseMSVCCRT)
 add_definitions(${LLVM_DEFINITIONS})
 include_directories(SYSTEM ${LLVM_INCLUDE_DIRS})
 include_directories("${LLVM_BINARY_DIR}/include" "${LLVM_INCLUDE_DIR}")
+
+ message(STATUS "1_3::---${LLVM_INCLUDE_DIRS}--${LLVM_BINARY_DIR}/include--${LLVM_INCLUDE_DIR}")
+
 set(TINYLANG_BUILT_STANDALONE 1)
 
 link_directories("${LLVM_LIBRARY_DIR}")

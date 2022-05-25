@@ -14,14 +14,31 @@ llvm_project=${GIT_ROOT_DIR}/../llvm-project/
 cd ${llvm_project}
 llvm_branch=`git branch --show-current`
 cd -
-llvm_install=${GIT_ROOT_DIR}/../${llvm_branch}
+#llvm_install=${GIT_ROOT_DIR}/../${llvm_branch}
 llvm_install=${GIT_ROOT_DIR}/../llvmorg-12.0.0
 #llvm_install="${GIT_ROOT_DIR}/../llvmorg-13.0.0"
+
+
+
 
 #BUILD_TYPE="Ninja"
 BUILD_TYPE="Xcode"
 
 echo "BUILD_TYPE: ${BUILD_TYPE}" 
+
+
+if [ "$BUILD_TYPE" = "Xcode" ]; then 
+llvm_install=${BASEDIR}/build
+fi
+
+
+#BUILD_FORCE="FORCE"
+# 强制编译 llvm
+if [ "$BUILD_FORCE" = "FORCE" ]; then 
+echo "mv ${llvm_install} ${llvm_install}-bak..."
+mv ${llvm_install} ${llvm_install}-bak
+fi
+
 
 if [ -d "${llvm_install}" ] 
 then
@@ -83,7 +100,6 @@ ninja
 
 ninja install
 elif [ "$BUILD_TYPE" = "Xcode" ]; then 
-
 cmake -G $BUILD_TYPE -DCMAKE_BUILD_TYPE=Release \
 -DLLVM_DIR=${llvm_install}/lib/cmake/llvm \
 -DCMAKE_INSTALL_PREFIX=${install_target_dir} ../
@@ -92,4 +108,7 @@ fi;
 
 
 
-
+# 强制编译 llvm
+if [ "$BUILD_FORCE" = "FORCE" ]; then 
+rm -rf ${llvm_install}-bak
+fi

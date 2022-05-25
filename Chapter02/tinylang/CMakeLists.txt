@@ -10,7 +10,8 @@ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
 
   include(AddLLVM)
   include(HandleLLVMOptions)
-
+  
+  include_directories(SYSTEM ${LLVM_INCLUDE_DIRS})
   include_directories("${LLVM_BINARY_DIR}/include" "${LLVM_INCLUDE_DIR}")
   link_directories("${LLVM_LIBRARY_DIR}")
     message(STATUS "1_3::------------------------------------------${LLVM_BINARY_DIR}--::${LLVM_INCLUDE_DIR}")
