@@ -28,7 +28,7 @@ echo "BUILD_TYPE: ${BUILD_TYPE}"
 
 
 if [ "$BUILD_TYPE" = "Xcode" ]; then 
-llvm_install=${BASEDIR}/build
+llvm_install="${BASEDIR}/build-LLVM"
 fi
 
 
@@ -46,11 +46,10 @@ then
 else
     echo "Directory ${llvm_install} does not exists."
     
-rm -rf build
 rm -rf ${llvm_install}
-mkdir build
+mkdir ${llvm_install}
 
-cd build
+cd ${llvm_install}
 
 
 if [ "$BUILD_TYPE" = "Ninja" ]; then 
