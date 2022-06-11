@@ -63,7 +63,7 @@ public:
         BufferStart = Buffer.begin();
         BufferPtr = BufferStart;
         
-#define USE_YYLEX
+#define USE_YYLEX                        
 #ifdef USE_YYLEX
         bp = yy_scan_string(BufferPtr);  // Creates a buffer from the string
         yy_switch_to_buffer(bp);                   // Use the buffer
@@ -74,7 +74,9 @@ public:
     void next(Token &token);
     ~Lexer()
     {
+#ifdef USE_YYLEX
         yy_delete_buffer(bp);  
+#endif
     }
     
 private:

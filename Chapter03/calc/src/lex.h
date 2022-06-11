@@ -1,8 +1,7 @@
-typedef char *string;
 typedef union  {
     int pos;
     int ival;
-    string sval;
+    char * sval;
     } YYSTYPE;
 
 YYSTYPE yylval;

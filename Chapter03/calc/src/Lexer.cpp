@@ -1,6 +1,6 @@
 #include "Lexer.h"
 #include "lex.h"
-#define USE_YYLEX
+#define USE_YYLEX                        
 
 #ifndef USE_YYLEX
 
@@ -97,27 +97,43 @@ void Lexer::next(Token &token) {
         case PLUS:
             printf("PLUS\n");
             kind = Token::plus;
+            formTokenStr(token, yylval.sval, kind);
+            break;
         case MINUS:
             printf("MINUS\n");
             kind = Token::minus;
+            formTokenStr(token, yylval.sval, kind);
+            break;
         case STAR:
             printf("STAR\n");
             kind = Token::star;
+            formTokenStr(token, yylval.sval, kind);
+            break;
         case SLASH:
             printf("SLASH\n");
             kind = Token::slash;
+            formTokenStr(token, yylval.sval, kind);
+            break;
         case L_PAREN:
             printf("L_PAREN\n");
             kind = Token::l_paren;
+            formTokenStr(token, yylval.sval, kind);
+            break;
         case R_PAREN:
             printf("R_PAREN\n");
             kind = Token::r_paren;
+            formTokenStr(token, yylval.sval, kind);
+            break;
         case COLON:
             printf("COLON\n");
             kind = Token::colon;
+            formTokenStr(token, yylval.sval, kind);
+            break;
         case COMMA:
             printf("COMMA\n");
             kind = Token::comma;
+            formTokenStr(token, yylval.sval, kind);
+            break;
         case UNKONWN:
             printf("UNKONWN\n");
             kind = Token::unknown;

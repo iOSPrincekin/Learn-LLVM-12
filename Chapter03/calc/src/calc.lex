@@ -9,7 +9,6 @@
 void adjust(void)
 {
 yylval.sval=yytext;
-yylval.ival=atoi(yylval.sval);
 }
 
 %}
