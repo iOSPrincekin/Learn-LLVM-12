@@ -16,14 +16,11 @@ llvm_branch=`git branch --show-current`
 cd -
 
 
-# ================================ buildLLVMTEMP 方法开始 =========================
+# ================================ buildLLVMllvm 方法开始 =========================
 
-function buildLLVMTEMP()
-{
-TEMP=$1
-#TEMP_install=${GIT_ROOT_DIR}/../${llvm_branch}
-TEMP_install=${GIT_ROOT_DIR}/../llvmorg-12.0.0
-#TEMP_install="${GIT_ROOT_DIR}/../llvmorg-13.0.0"
+#llvm_install=${GIT_ROOT_DIR}/../${llvm_branch}
+llvm_install=${GIT_ROOT_DIR}/../llvmorg-12.0.0
+#llvm_install="${GIT_ROOT_DIR}/../llvmorg-13.0.0"
 
 
 
@@ -35,34 +32,34 @@ echo "BUILD_TYPE: ${BUILD_TYPE}"
 
 
 if [ "$BUILD_TYPE" = "Xcode" ]; then 
-TEMP_install="${BASEDIR}/build-${TEMP}"
+llvm_install="${BASEDIR}/build-llvm"
 fi
 
 
 #BUILD_FORCE="FORCE"
-# 强制编译 ${TEMP}
+# 强制编译 ${llvm}
 if [ "$BUILD_FORCE" = "FORCE" ]; then 
-echo "mv ${TEMP_install} ${TEMP_install}-bak..."
-mv ${TEMP_install} ${TEMP_install}-bak
+echo "mv ${llvm_install} ${llvm_install}-bak..."
+mv ${llvm_install} ${llvm_install}-bak
 fi
 
 
-if [ -d "${TEMP_install}" ] 
+if [ -d "${llvm_install}" ] 
 then
-    echo "Directory ${TEMP_install} exists." 
+    echo "Directory ${llvm_install} exists." 
 else
-    echo "Directory ${TEMP_install} does not exists."
+    echo "Directory ${llvm_install} does not exists."
     
-rm -rf ${TEMP_install}
-mkdir ${TEMP_install}
+rm -rf ${llvm_install}
+mkdir ${llvm_install}
 
-cd ${TEMP_install}
+cd ${llvm_install}
 
 
 if [ "$BUILD_TYPE" = "Ninja" ]; then 
 cmake -G $BUILD_TYPE -DCMAKE_BUILD_TYPE=Release \
--DCMAKE_INSTALL_PREFIX=${TEMP_install} \
-${llvm_project}/${TEMP}
+-DCMAKE_INSTALL_PREFIX=${llvm_install} \
+${llvm_project}/llvm
 
 
 ninja -j12
@@ -71,8 +68,9 @@ ninja install
 elif [ "$BUILD_TYPE" = "Xcode" ]; then 
 
 cmake -G $BUILD_TYPE -DCMAKE_BUILD_TYPE=Release \
--DCMAKE_INSTALL_PREFIX=${TEMP_install} \
-${llvm_project}/${TEMP}
+-DLLVM_ENABLE_PROJECTS=clang \
+-DCMAKE_INSTALL_PREFIX=${llvm_install} \
+${llvm_project}/llvm
 
 make -j12
 
@@ -81,11 +79,10 @@ fi
 
 fi
 
-}
 
-# ================================ buildLLVMTEMP 方法结束 =========================
+# ================================ buildLLVMllvm 方法结束 =========================
 
-buildLLVMTEMP llvm
+
 
 # ================================ build Target 开始 =========================
 
@@ -97,9 +94,9 @@ cd ${BASEDIR}
 build_target_dir=${BASEDIR}/build-${build_target}
 install_target_dir=${BASEDIR}/install-${build_target}
 
-if [ -d "${install_target_dir}" ] 
+if [ -d "${build_target_dir}" ] 
 then
-    echo "Directory ${install_target_dir} exists." 
+    echo "Directory ${build_target_dir} exists." 
 else
 rm -rf ${build_target_dir}
 rm -rf ${install_target_dir}
@@ -111,7 +108,7 @@ cd ${build_target_dir}
 
 if [ "$BUILD_TYPE" = "Ninja" ]; then 
 cmake -G $BUILD_TYPE -DCMAKE_BUILD_TYPE=Release \
--DLLVM_DIR=${TEMP_install}/lib/cmake/llvm \
+-DLLVM_DIR=${llvm_install}/lib/cmake/llvm \
 -DCMAKE_INSTALL_PREFIX=${install_target_dir} ../
 
 
@@ -120,7 +117,7 @@ ninja
 ninja install
 elif [ "$BUILD_TYPE" = "Xcode" ]; then 
 cmake -G $BUILD_TYPE -DCMAKE_BUILD_TYPE=Release \
--DLLVM_DIR=${TEMP_install}/lib/cmake/llvm \
+-DLLVM_DIR=${llvm_install}/lib/cmake/llvm \
 -DCMAKE_INSTALL_PREFIX=${install_target_dir} ../
 
 fi;

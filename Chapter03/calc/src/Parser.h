@@ -38,6 +38,7 @@ class Parser {
     Expr *parseFactor();
     
 public:
+    
     Parser(Lexer &Lex) : Lex(Lex), HasError(false) {
         advance();
     }
