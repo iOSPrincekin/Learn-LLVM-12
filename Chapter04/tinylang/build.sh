@@ -14,9 +14,32 @@ llvm_project=${GIT_ROOT_DIR}/../llvm-project/
 cd ${llvm_project}
 llvm_branch=`git branch --show-current`
 cd -
-llvm_install=${GIT_ROOT_DIR}/../${llvm_branch}
-llvm_install=${GIT_ROOT_DIR}/../llvmorg-12.0.0
-#llvm_install="${GIT_ROOT_DIR}/../llvmorg-13.0.0"
+
+
+# ================================ buildLLVMllvm 方法开始 =========================
+
+
+
+
+
+#BUILD_TYPE="Ninja"
+BUILD_TYPE="Xcode"
+
+echo "BUILD_TYPE: ${BUILD_TYPE}" 
+
+
+if [ "$BUILD_TYPE" = "Xcode" ]; then 
+llvm_install="${BASEDIR}/../../../llvmorg-Xcode"
+fi
+
+
+#BUILD_FORCE="FORCE"
+# 强制编译 ${llvm}
+if [ "$BUILD_FORCE" = "FORCE" ]; then 
+echo "mv ${llvm_install} ${llvm_install}-bak..."
+mv ${llvm_install} ${llvm_install}-bak
+fi
+
 
 if [ -d "${llvm_install}" ] 
 then
@@ -24,37 +47,64 @@ then
 else
     echo "Directory ${llvm_install} does not exists."
     
-rm -rf build
 rm -rf ${llvm_install}
-mkdir build
+mkdir ${llvm_install}
 
-cd build
-cmake -G Ninja -DCMAKE_BUILD_TYPE=Release \
+cd ${llvm_install}
+
+
+if [ "$BUILD_TYPE" = "Ninja" ]; then 
+cmake -G $BUILD_TYPE -DCMAKE_BUILD_TYPE=Release \
 -DCMAKE_INSTALL_PREFIX=${llvm_install} \
 ${llvm_project}/llvm
 
 
-ninja
-ninja install
+ninja -j12
 
+ninja install
+elif [ "$BUILD_TYPE" = "Xcode" ]; then 
+
+cmake -G $BUILD_TYPE -DCMAKE_BUILD_TYPE=Release \
+-DLLVM_ENABLE_PROJECTS=clang \
+-DCMAKE_INSTALL_PREFIX=${llvm_install} \
+${llvm_project}/llvm
+
+make -j12
+
+make install
+fi
 
 fi
 
-build_target=tinylang
 
+# ================================ buildLLVMllvm 方法结束 =========================
+
+
+
+# ================================ build Target 开始 =========================
+
+
+build_target=tinylang
 
 cd ${BASEDIR}
 
 build_target_dir=${BASEDIR}/build-${build_target}
 install_target_dir=${BASEDIR}/install-${build_target}
+
+if [ -d "${build_target_dir}" ] 
+then
+    echo "Directory ${build_target_dir} exists." 
+else
 rm -rf ${build_target_dir}
 rm -rf ${install_target_dir}
 mkdir ${build_target_dir}
 cd ${build_target_dir}
-echo "dir::${llvm_install}/lib/cmake/llvm"
-echo "xxx-::${llvm_install}"
 
-cmake -G Ninja -DCMAKE_BUILD_TYPE=Release \
+
+
+
+if [ "$BUILD_TYPE" = "Ninja" ]; then 
+cmake -G $BUILD_TYPE -DCMAKE_BUILD_TYPE=Release \
 -DLLVM_DIR=${llvm_install}/lib/cmake/llvm \
 -DCMAKE_INSTALL_PREFIX=${install_target_dir} ../
 
@@ -62,5 +112,15 @@ cmake -G Ninja -DCMAKE_BUILD_TYPE=Release \
 ninja
 
 ninja install
+elif [ "$BUILD_TYPE" = "Xcode" ]; then 
+cmake -G $BUILD_TYPE -DCMAKE_BUILD_TYPE=Release \
+-DLLVM_DIR=${llvm_install}/lib/cmake/llvm \
+-DCMAKE_INSTALL_PREFIX=${install_target_dir} ../
+
+fi;
+fi;
+# ================================ build Target 结束 =========================
+
+
 
 

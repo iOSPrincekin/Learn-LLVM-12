@@ -18,9 +18,6 @@ cd -
 
 # ================================ buildLLVMllvm 方法开始 =========================
 
-#llvm_install=${GIT_ROOT_DIR}/../${llvm_branch}
-llvm_install=${GIT_ROOT_DIR}/../llvmorg-12.0.0
-#llvm_install="${GIT_ROOT_DIR}/../llvmorg-13.0.0"
 
 
 
@@ -32,7 +29,7 @@ echo "BUILD_TYPE: ${BUILD_TYPE}"
 
 
 if [ "$BUILD_TYPE" = "Xcode" ]; then 
-llvm_install="${BASEDIR}/build-llvm"
+llvm_install="${BASEDIR}/../../../llvmorg-Xcode"
 fi
 
 
