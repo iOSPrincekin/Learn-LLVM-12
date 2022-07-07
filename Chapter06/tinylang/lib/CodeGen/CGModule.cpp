@@ -19,8 +19,11 @@ void CGModule::initialize() {
   Int1Ty = llvm::Type::getInt1Ty(getLLVMCtx());
   Int32Ty = llvm::Type::getInt32Ty(getLLVMCtx());
   Int64Ty = llvm::Type::getInt64Ty(getLLVMCtx());
-  Int32Zero =
-      llvm::ConstantInt::get(Int32Ty, 0, /*isSigned*/ true);
+  Int32Zero = llvm::ConstantInt::get(Int32Ty, 0, /*isSigned*/ true);
+    
+  llvm::Type *IntTy = llvm::Type::getInt32Ty(getLLVMCtx());
+  llvm::PointerType *PtrTy = llvm::PointerType::get(IntTy, 0);
+  PtrNULL = llvm::ConstantPointerNull::get(PtrTy);
 }
 
 llvm::Type *CGModule::convertType(TypeDeclaration *Ty) {
@@ -83,10 +86,18 @@ void CGModule::run(ModuleDeclaration *Mod) {
     if (auto *Var =
             llvm::dyn_cast<VariableDeclaration>(Decl)) {
       // Create global variables
+        llvm::StructType* type = (llvm::StructType*)(convertType(Var->getType()));
+        std::vector<llvm::Constant*> TempValues;
+        TempValues.reserve(type->getNumElements());
+        for (unsigned i = 0; i < type->getNumElements(); ++i)
+            TempValues.push_back(llvm::Constant::getNullValue(type));
+        llvm::ArrayRef<llvm::Constant*> VectorValue(TempValues);
+
+        llvm::Constant * typeNULL = llvm::ConstantStruct::get(type,VectorValue);
       llvm::GlobalVariable *V = new llvm::GlobalVariable(
-          *M, convertType(Var->getType()),
+          *M, type,
           /*isConstant=*/false,
-          llvm::GlobalValue::PrivateLinkage, nullptr,
+          llvm::GlobalValue::PrivateLinkage, typeNULL,
           mangleName(Var));
       Globals[Var] = V;
     } else if (auto *Proc =

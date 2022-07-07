@@ -25,6 +25,7 @@ public:
   llvm::Type *Int32Ty;
   llvm::Type *Int64Ty;
   llvm::Constant *Int32Zero;
+  llvm::Constant *PtrNULL;
 
 public:
   CGModule(ASTContext &ASTCtx, llvm::Module *M);
