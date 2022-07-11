@@ -1,23 +1,17 @@
-MODULE Gcd;
+MODULE Point;
 
 TYPE Point = RECORD X, Y: INTEGER END;
 
-VAR x: INTEGER;
-    p: Point;
+VAR p: Point;
 
-PROCEDURE GCD(a, b: INTEGER) : INTEGER;
-VAR t: INTEGER;
+PROCEDURE AssignX(a: INTEGER);
 BEGIN
-  IF b = 0 THEN
-    RETURN a;
-  END;
-  WHILE b # 0 DO
-    t := a MOD b;
-    a := b;
-    b := t;
-  END;
   p.X := a;
-  RETURN a;
-END GCD;
+END AssignX;
 
-END Gcd.
+TYPE Shape = RECORD color: INTEGER;
+PROCEDURE (VAR s: Shape) GetColor():INTEGER;
+PROCEDURE (VAR s: Shape) Area(): REAL;
+END;
+
+END Point.

@@ -96,11 +96,20 @@ void CGModule::run(ModuleDeclaration *Mod) {
   for (auto *Decl : Mod->getDecls()) {
     if (auto *Var =
             llvm::dyn_cast<VariableDeclaration>(Decl)) {
+        // Create global variables
+        llvm::StructType* type = (llvm::StructType*)(convertType(Var->getType()));
+        std::vector<llvm::Constant*> TempValues;
+        TempValues.reserve(type->getNumElements());
+        for (unsigned i = 0; i < type->getNumElements(); ++i)
+            TempValues.push_back(llvm::Constant::getNullValue(type));
+        llvm::ArrayRef<llvm::Constant*> VectorValue(TempValues);
+        llvm::Constant * typeNULL = llvm::ConstantStruct::get(type,VectorValue);
+
       // Create global variables
       llvm::GlobalVariable *V = new llvm::GlobalVariable(
           *M, convertType(Var->getType()),
           /*isConstant=*/false,
-          llvm::GlobalValue::PrivateLinkage, nullptr,
+          llvm::GlobalValue::PrivateLinkage, typeNULL,
           mangleName(Var));
       Globals[Var] = V;
       if (CGDebugInfo *Dbg = getDbgInfo())
