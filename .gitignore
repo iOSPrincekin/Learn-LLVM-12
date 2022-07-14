@@ -1,3 +1,5 @@
 build*
 !build.sh
 install*
+LangRef/prog
+LangRef/prog.o
