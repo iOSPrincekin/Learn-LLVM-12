@@ -11,9 +11,9 @@ using namespace llvm;
 int main()
 {
     CodeGen CodeGenerator;
- //   CodeGenerator.compile();
- //   CodeGenerator.createLLVMSumModule();
-    CodeGenerator.createLLVMWhileModule();
+    CodeGenerator.compile();
+  //  CodeGenerator.createLLVMSumModule();
+  //  CodeGenerator.createLLVMWhileModule();
     return 0;
 }
 

@@ -7,6 +7,7 @@
 #include "hello_world.hpp"
 int main()
 {
-    hello_world::generateIR();
+    hello_world h;
+    h.generateIR();
     return 0;
 }

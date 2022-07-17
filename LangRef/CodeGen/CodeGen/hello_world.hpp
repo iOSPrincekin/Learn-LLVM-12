@@ -17,7 +17,24 @@
 using namespace llvm;
 
 class hello_world{
+private:
+    Type *VoidTy;
+    Type *Int8Ty;
+    Type *Int32Ty;
+    Type *Int64Ty;
+    PointerType *VoidPtrTy;
+    PointerType *Int8PtrTy;
+    PointerType *Int32PtrTy;
+    PointerType *Int8PtrPtrTy;
+    Constant *Int32Zero;
+    Constant *Int64Zero;
+    
+    LLVMContext* Context;
+    Module* M;
 public:
-    static void generateIR();
+    hello_world();
+    void generateIR();
+    Value * ConstString(const std::string &str_val,
+                const std::string &name) const;
 };
 #endif /* hello_world_hpp */
