@@ -1,12 +1,12 @@
 //
-//  hello_world.hpp
+//  factorial.hpp
 //  CodeGen
 //
-//  Created by LEE on 7/14/22.
+//  Created by LEE on 7/18/22.
 //
 
-#ifndef hello_world_hpp
-#define hello_world_hpp
+#ifndef factorial_hpp
+#define factorial_hpp
 
 #include <stdio.h>
 #include "llvm/ADT/StringMap.h"
@@ -16,7 +16,7 @@
 #include "llvm/Support/raw_ostream.h"
 using namespace llvm;
 
-class hello_world{
+class factorial{
 private:
     Type *VoidTy;
     Type *Int8Ty;
@@ -25,7 +25,6 @@ private:
     PointerType *VoidPtrTy;
     PointerType *Int8PtrTy;
     PointerType *Int32PtrTy;
-    PointerType *Int64PtrTy;
     PointerType *Int8PtrPtrTy;
     Constant *Int32Zero;
     Constant *Int64Zero;
@@ -33,9 +32,9 @@ private:
     LLVMContext* Context;
     Module* M;
 public:
-    
-    hello_world();
+    factorial();
     
     void generateIR();
+    
 };
-#endif /* hello_world_hpp */
+#endif /* factorial_hpp */

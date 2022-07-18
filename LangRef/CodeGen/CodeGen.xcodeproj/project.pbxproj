@@ -14,9 +14,17 @@
 		9B10F831287FDD8B00B94AD2 /* test.ll in Sources */ = {isa = PBXBuildFile; fileRef = 9B10F82D287FDD8B00B94AD2 /* test.ll */; };
 		9B10F832287FDD8B00B94AD2 /* gep.ll in Sources */ = {isa = PBXBuildFile; fileRef = 9B10F82E287FDD8B00B94AD2 /* gep.ll */; };
 		9B10F833287FDD8B00B94AD2 /* hello_world.ll in Sources */ = {isa = PBXBuildFile; fileRef = 9B10F82F287FDD8B00B94AD2 /* hello_world.ll */; };
+		9B7BE02C2884CAA2000ABD11 /* factorial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9B7BE02A2884CAA2000ABD11 /* factorial.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		9B22575E2885A70300F76BE1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9B82C0302880D5210089CCF9 /* LLVM.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = C6C0A77E6A6D4FF1A4695E31;
+			remoteInfo = LLVMCore;
+		};
 		9B82C2972880D5250089CCF9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 9B82C0302880D5210089CCF9 /* LLVM.xcodeproj */;
@@ -3053,6 +3061,8 @@
 		9B10F82E287FDD8B00B94AD2 /* gep.ll */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm.llvm; name = gep.ll; path = ../../gep.ll; sourceTree = "<group>"; };
 		9B10F82F287FDD8B00B94AD2 /* hello_world.ll */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm.llvm; name = hello_world.ll; path = ../../hello_world.ll; sourceTree = "<group>"; };
 		9B7BDDC428844EEA000ABD11 /* hello_world.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hello_world.c; sourceTree = "<group>"; };
+		9B7BE02A2884CAA2000ABD11 /* factorial.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = factorial.cpp; sourceTree = "<group>"; };
+		9B7BE02B2884CAA2000ABD11 /* factorial.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = factorial.hpp; sourceTree = "<group>"; };
 		9B82C0302880D5210089CCF9 /* LLVM.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = LLVM.xcodeproj; path = "../../../llvmorg-Xcode/LLVM.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -3089,6 +3099,8 @@
 			children = (
 				9B04A2B9287D04B200F33297 /* CodeGen.cpp */,
 				9B04A2BA287D04B200F33297 /* CodeGen.hpp */,
+				9B7BE02A2884CAA2000ABD11 /* factorial.cpp */,
+				9B7BE02B2884CAA2000ABD11 /* factorial.hpp */,
 				9B10F82C287FDD8B00B94AD2 /* factorial.ll */,
 				9B10F82E287FDD8B00B94AD2 /* gep.ll */,
 				9B7BDDC428844EEA000ABD11 /* hello_world.c */,
@@ -3552,6 +3564,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				9B22575F2885A70300F76BE1 /* PBXTargetDependency */,
 			);
 			name = CodeGen;
 			productName = CodeGen;
@@ -6617,6 +6630,7 @@
 				9B10F82B287FDCA200B94AD2 /* hello_world.cpp in Sources */,
 				9B04A2B3287D047400F33297 /* main.cpp in Sources */,
 				9B10F832287FDD8B00B94AD2 /* gep.ll in Sources */,
+				9B7BE02C2884CAA2000ABD11 /* factorial.cpp in Sources */,
 				9B04A2BB287D04B200F33297 /* CodeGen.cpp in Sources */,
 				9B10F831287FDD8B00B94AD2 /* test.ll in Sources */,
 				9B10F833287FDD8B00B94AD2 /* hello_world.ll in Sources */,
@@ -6625,6 +6639,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		9B22575F2885A70300F76BE1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = LLVMCore;
+			targetProxy = 9B22575E2885A70300F76BE1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		9B04A2B4287D047400F33297 /* Debug */ = {

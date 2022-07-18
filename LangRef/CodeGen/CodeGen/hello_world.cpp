@@ -16,22 +16,12 @@ hello_world::hello_world()
     Int64Ty = Type::getInt64Ty(M->getContext());
     Int8PtrTy = PointerType::get(Int8Ty,0);
     Int32PtrTy = Type::getInt32PtrTy(M->getContext());
+    Int64PtrTy = Type::getInt64PtrTy(M->getContext());
+
     Int8PtrPtrTy = Int8PtrTy->getPointerTo();
     Int32Zero = ConstantInt::get(Int32Ty, 0,true);
     Int64Zero = ConstantInt::get(Int64Ty, 0,true);
-
 }
-
-Value *hello_world::ConstString(const std::string &str_val,
-                                  const std::string &name) const {
-    // Strings are treated as arrays of bytes
-    auto *str = llvm::ConstantDataArray::getString(*Context, str_val);
-    auto *global_var =
-    new llvm::GlobalVariable(*M, str->getType(), true,
-                             llvm::GlobalValue::InternalLinkage, str, name);
-    return NULL;
-}
-
 
 void hello_world::generateIR()
 {
@@ -41,21 +31,14 @@ void hello_world::generateIR()
                                                         StrConstant,".Str",nullptr,GlobalVariable::NotThreadLocal,0);
     hello_world_GV->setUnnamedAddr(GlobalValue::UnnamedAddr::Global);
     
-    Int8Ty = Type::getInt8Ty(M->getContext());
-    Int32Ty = Type::getInt32Ty(M->getContext());
-    Int64Ty = Type::getInt64Ty(M->getContext());
-    Int8PtrTy = PointerType::get(Int8Ty,0);
     FunctionType *Fty = FunctionType::get(Int32Ty, Int8PtrTy, false);
     Twine N = "puts";
     Function *Fn = Function::Create(Fty, GlobalVariable::ExternalLinkage, N,M);
     Fn->addFnAttr(Attribute::NoUnwind);
-    Fn->addAttribute(1, Attribute::NoCapture);
-  //  Fn->addAttribute(2, Attribute::NoUnwind);
 
-    
     //2、创建main函数
     FunctionType *ft = FunctionType::get(Int32Ty, std::vector<Type *>(), false);
-    Function *mainFunc = Function::Create(ft, Function::ExternalLinkage, "_main", M);
+    Function *mainFunc = Function::Create(ft, Function::ExternalLinkage, "main", M);
     // 创建最外层函数的basic
     BasicBlock *mainEntryBlock = BasicBlock::Create(M->getContext(),"entry",mainFunc,0);
     
@@ -81,5 +64,4 @@ void hello_world::generateIR()
     ReturnInst *returnZero = ReturnInst::Create(mainFunc->getContext(),Int32Zero,mainEntryBlock);
     
     M->dump();
-    
 }
