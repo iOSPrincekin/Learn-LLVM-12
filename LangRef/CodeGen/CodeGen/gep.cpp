@@ -29,7 +29,7 @@ void gen::generateIR(){
     Constant *helloString = ConstantDataArray::getString(M->getContext(), "hello\n");
     GlobalVariable *helloString_GV = new GlobalVariable(*M,helloString->getType(),true,GlobalValue::PrivateLinkage,helloString,"helloString",nullptr,GlobalVariable::NotThreadLocal,0);
     
-    Constant *formatString = ConstantDataArray::getString(M->getContext(), "hello\n");
+    Constant *formatString = ConstantDataArray::getString(M->getContext(), "c:%d\n");
     GlobalVariable *formatString_GV = new GlobalVariable(*M,formatString->getType(),true,GlobalValue::PrivateLinkage,formatString,"formatString",nullptr,GlobalVariable::NotThreadLocal,0);
     
     // array1
@@ -155,7 +155,7 @@ void gen::generateIR(){
     
     // printf helloString
     Type* printfArgTys[] = {Int8PtrTy};
-    FunctionType *printfFT = FunctionType::get(Int32Ty, printfArgTys, false);
+    FunctionType *printfFT = FunctionType::get(Int32Ty, printfArgTys, true);
     Function *printFN = Function::Create(printfFT, Function::ExternalLinkage, "printf",M);
     
     Type* helloStringType = helloString->getType();
@@ -179,9 +179,6 @@ void gen::generateIR(){
     GetElementPtrInst* formatStringInst = GetElementPtrInst::CreateInBounds(formatStringType, formatString_GV,ArrayRef<Value*>(formatStringIndex,2),"formatStringPtr",mainEntryBlock);
     printfArgs = {formatStringInst,array1_elem_val_Inst};
     
-    Type *printfArgTys2[] = {Int8PtrTy,Int8Ty};
-    printfFT = FunctionType::get(Int32Ty, printfArgTys2, false);
-    //printFN = Function::Create(printfFT, Function::ExternalLinkage, "printf",M);
     printfResult = CallInst::Create(printfFT, printFN,printfArgs,"call2",mainEntryBlock);
     
     
@@ -206,8 +203,6 @@ void gen::generateIR(){
     printfResult = CallInst::Create(printfFT, printFN,printfArgs,"call5",mainEntryBlock);
     
     printfArgs = {formatStringInst,struct1_elem_val3_Inst};
-    Type *printfArgTys3[] = {Int8PtrTy,Int32Ty};
-    printfFT = FunctionType::get(Int32Ty, printfArgTys3, false);
     printfResult = CallInst::Create(printfFT, printFN,printfArgs,"call6",mainEntryBlock);
     
     Value* struct2_new_ptr1_Index[2] = {Int32Zero,int32_v1};
@@ -223,8 +218,6 @@ void gen::generateIR(){
     GetElementPtrInst *goal1Inst = GetElementPtrInst::Create(array2Type, strcut2_loaded_ptr_Inst, goal1Index,"goal1", mainEntryBlock);
     LoadInst *goal2Inst = new LoadInst(Int8Ty, goal1Inst, "goal2", mainEntryBlock);
     printfArgs = {formatStringInst,goal2Inst};
-    Type *printfArgTys4[] = {Int8PtrTy,Int8Ty};
-    printfFT = FunctionType::get(Int32Ty, printfArgTys4, false);
     printfResult = CallInst::Create(printfFT, printFN,printfArgs,"call7",mainEntryBlock);
     
     ReturnInst* retInst = ReturnInst::Create(M->getContext(), Int32Zero, mainEntryBlock);
