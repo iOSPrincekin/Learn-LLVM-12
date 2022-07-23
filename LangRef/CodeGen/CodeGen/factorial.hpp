@@ -26,6 +26,7 @@ private:
     PointerType *Int8PtrTy;
     PointerType *Int32PtrTy;
     PointerType *Int8PtrPtrTy;
+    Constant *Int8Zero;
     Constant *Int32Zero;
     Constant *Int64Zero;
     
