@@ -6,14 +6,18 @@
 //
 #include "hello_world.hpp"
 #include "factorial.hpp"
+#include "gep.hpp"
 int main()
 {
 #if 0
     hello_world h;
     h.generateIR();
-#else
+#elif 0
     factorial f;
     f.generateIR();
+#else
+    gen g;
+    g.generateIR();
 #endif
     return 0;
 }
