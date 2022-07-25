@@ -192,6 +192,7 @@ int main(int Argc, const char **Argv) {
       llvm::LLVMContext Ctx;
       if (CodeGenerator *CG = CodeGenerator::create(Ctx, TM)) {
         std::unique_ptr<llvm::Module> M = CG->run(Mod, F);
+          M->dump();
         if (!emit(Argv[0], M.get(), TM, F)) {
           llvm::WithColor::error(llvm::errs(), Argv[0]) << "Error writing output\n";
         }

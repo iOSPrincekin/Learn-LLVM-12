@@ -13,6 +13,11 @@
 #include "llvm/Support/TargetSelect.h"
 #include "llvm/Support/ToolOutputFile.h"
 #include "llvm/Support/WithColor.h"
+#include "llvm/ADT/StringMap.h"
+#include "llvm/IR/IRBuilder.h"
+#include "llvm/IR/LLVMContext.h"
+#include "llvm/IR/Verifier.h"
+#include "llvm/Support/raw_ostream.h"
 
 using namespace llvm;
 using namespace tinylang;
@@ -194,6 +199,68 @@ int main(int Argc, const char **Argv) {
       if (CodeGenerator *CG =
               CodeGenerator::create(Ctx, ASTCtx, TM)) {
         std::unique_ptr<llvm::Module> M = CG->run(Mod, F);
+          Type* Int1Ty = Type::getInt1Ty(M->getContext());
+          Type* Int8Ty = Type::getInt8Ty(M->getContext());
+          Type* Int16Ty = Type::getInt16Ty(M->getContext());
+          Type* Int32Ty = Type::getInt32Ty(M->getContext());
+          Type* Int64Ty = Type::getInt64Ty(M->getContext());
+          
+          Constant* Int32Zero = ConstantInt::get(Int32Ty, 0);
+          
+          PointerType*Int8PtrTy = PointerType::get(Int8Ty, 0);
+          PointerType*Int16PtrTy = PointerType::get(Int16Ty, 0);
+          PointerType*Int32PtrTy = PointerType::get(Int32Ty, 0);
+          PointerType*Int64PtrTy = PointerType::get(Int64Ty, 0);
+          
+          Constant* formatString = ConstantDataArray::getString(M->getContext(), "c:%d\00");
+          GlobalVariable *formatString_GV = new GlobalVariable(*M,formatString->getType(),true,GlobalValue::PrivateLinkage,
+                                                               formatString,"formatString",nullptr,GlobalVariable::NotThreadLocal,0);
+          
+          FunctionType*mainFT = FunctionType::get(Int64Ty, std::vector<Type*>(), false);
+          Function *mainF = Function::Create(mainFT, Function::ExternalLinkage, "main", *M);
+          BasicBlock* mainEntryBlock = BasicBlock::Create(M->getContext(),"entry",mainF,0);
+          StringRef function1Name = "_t3Gcd3GCD";
+          Function*function1 =  M->getFunction(function1Name);
+          
+          FunctionType*function1Type = function1->getFunctionType();
+          Constant*Int64_v1 = ConstantInt::get(Int64Ty, 1);
+          Constant*Int64_v2 = ConstantInt::get(Int64Ty, 1);
+
+          ArrayRef<Value*> function1Args = {Int64_v1,Int64_v2};
+          CallInst* Result = CallInst::Create(function1Type, function1, function1Args,"", mainEntryBlock);
+          
+        
+          Type *printfArgTys[] = {Int8PtrTy,Int64Ty};
+          FunctionType *printfFT = FunctionType::get(Int32Ty, printfArgTys, false);
+          Function *printfFN = Function::Create(printfFT, Function::ExternalLinkage, "printf",*M);
+          
+
+          Value* indexList[2] = {Int32Zero, Int32Zero};
+          Type *formatStringType = formatString->getType();
+          
+          GetElementPtrInst* formatStringPtr = GetElementPtrInst::CreateInBounds(formatStringType,formatString_GV, ArrayRef<Value*>(indexList, 2), "formatStringPtr",mainEntryBlock);
+          
+          ArrayRef<Value *> printfArgs = {formatStringPtr,Result};
+          
+          CallInst* printfResult = CallInst::Create(printfFT, printfFN,printfArgs,"",mainEntryBlock);
+          
+          
+          // 获取 全局结构体 _t3Gcd1p
+          GlobalVariable*t3Gcd1p = M->getGlobalVariable("_t3Gcd1p");
+          
+          Value* t3Gcd1p_indexList[2] = {Int32Zero, Int32Zero};
+          PointerType *t3Gcd1p_ptrType = t3Gcd1p->getType();
+          Type*t3Gcd1p_type = t3Gcd1p_ptrType->getElementType();
+          t3Gcd1p_type->dump();
+          GetElementPtrInst* t3Gcd1p_ptrInst = GetElementPtrInst::CreateInBounds(t3Gcd1p_type,t3Gcd1p, ArrayRef<Value*>(t3Gcd1p_indexList, 2), "t3Gcd1p_ptrInst",mainEntryBlock);
+          LoadInst* t3Gcd1p_ptrInst_loadInst = new LoadInst(Int64Ty,t3Gcd1p_ptrInst,"t3Gcd1p_ptrInst_loadInst",mainEntryBlock);
+          ArrayRef<Value *> t3Gcd1p_printfArgs = {formatStringPtr,t3Gcd1p_ptrInst_loadInst};
+          
+          CallInst* t3Gcd1p_printfResult = CallInst::Create(printfFT, printfFN,t3Gcd1p_printfArgs,"",mainEntryBlock);
+
+          ReturnInst *mainReturnInst = ReturnInst::Create(M->getContext(), Int64_v1, mainEntryBlock);
+
+        M->dump();
         if (!emit(Argv[0], M.get(), TM, F)) {
           llvm::WithColor::error(errs(), Argv[0])
               << "Error writing output\n";

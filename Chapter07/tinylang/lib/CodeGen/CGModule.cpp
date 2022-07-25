@@ -17,10 +17,15 @@ CGModule::CGModule(ASTContext &ASTCtx, llvm::Module *M)
 void CGModule::initialize() {
   VoidTy = llvm::Type::getVoidTy(getLLVMCtx());
   Int1Ty = llvm::Type::getInt1Ty(getLLVMCtx());
+  Int8Ty = llvm::Type::getInt8Ty(getLLVMCtx());
+  Int16Ty = llvm::Type::getInt32Ty(getLLVMCtx());
   Int32Ty = llvm::Type::getInt32Ty(getLLVMCtx());
   Int64Ty = llvm::Type::getInt64Ty(getLLVMCtx());
-  Int32Zero =
-      llvm::ConstantInt::get(Int32Ty, 0, /*isSigned*/ true);
+  Int1Zero = llvm::ConstantInt::get(Int1Ty, 0,true);
+  Int8Zero = llvm::ConstantInt::get(Int8Ty, 0,true);
+  Int16Zero = llvm::ConstantInt::get(Int16Ty, 0,true);
+  Int32Zero = llvm::ConstantInt::get(Int32Ty, 0, /*isSigned*/ true);
+  Int64Zero = llvm::ConstantInt::get(Int64Ty, 0,true);
   if (Debug)
     DebugInfo.reset(new CGDebugInfo(*this));
 }
@@ -60,6 +65,24 @@ llvm::Type *CGModule::convertType(TypeDeclaration *Ty) {
   llvm::report_fatal_error("Unsupported type");
 }
 
+llvm::Constant *CGModule::getDefaultConstant(llvm::Type *T) {
+    
+    if (T == Int64Ty){
+        return Int64Zero;
+    }else if (T == Int1Ty){
+        return Int1Zero;
+    } else if (T->isArrayTy()) {
+   
+        llvm::ConstantAggregateZero* constArrayZero = llvm::ConstantAggregateZero::get(T);
+        
+        return constArrayZero;
+    } else if (T->isStructTy()) {
+        llvm::ConstantAggregateZero* constStructZero = llvm::ConstantAggregateZero::get(T);
+        
+        return constStructZero;
+    }
+    llvm::report_fatal_error("Unsupported type");
+}
 std::string CGModule::mangleName(Decl *D) {
   std::string Mangled;
   llvm::SmallString<16> Tmp;
@@ -96,20 +119,16 @@ void CGModule::run(ModuleDeclaration *Mod) {
   for (auto *Decl : Mod->getDecls()) {
     if (auto *Var =
             llvm::dyn_cast<VariableDeclaration>(Decl)) {
-        // Create global variables
-        llvm::StructType* type = (llvm::StructType*)(convertType(Var->getType()));
-        std::vector<llvm::Constant*> TempValues;
-        TempValues.reserve(type->getNumElements());
-        for (unsigned i = 0; i < type->getNumElements(); ++i)
-            TempValues.push_back(llvm::Constant::getNullValue(type));
-        llvm::ArrayRef<llvm::Constant*> VectorValue(TempValues);
-        llvm::Constant * typeNULL = llvm::ConstantStruct::get(type,VectorValue);
-
+      
       // Create global variables
+       llvm::Type *varType = convertType(Var->getType());
+        varType->dump();
+        llvm::Constant *zero = getDefaultConstant(varType);
+        zero->dump();
       llvm::GlobalVariable *V = new llvm::GlobalVariable(
-          *M, convertType(Var->getType()),
+          *M, varType,
           /*isConstant=*/false,
-          llvm::GlobalValue::PrivateLinkage, typeNULL,
+          llvm::GlobalValue::ExternalLinkage, zero,
           mangleName(Var));
       Globals[Var] = V;
       if (CGDebugInfo *Dbg = getDbgInfo())

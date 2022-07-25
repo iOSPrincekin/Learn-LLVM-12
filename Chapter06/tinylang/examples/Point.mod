@@ -15,10 +15,6 @@ PROCEDURE GetColor(s: Shape):INTEGER;
 BEGIN
 END GetColor;
 
-PROCEDURE Area(s: Shape): INTEGER;
-BEGIN
-    RETURN 2 * radius * radius; 
-END Area;
 
 
 END Point.

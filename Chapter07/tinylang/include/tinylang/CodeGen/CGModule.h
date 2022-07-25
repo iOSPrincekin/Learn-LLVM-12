@@ -27,9 +27,17 @@ class CGModule {
 public:
   llvm::Type *VoidTy;
   llvm::Type *Int1Ty;
+  llvm::Type *Int8Ty;
+  llvm::Type *Int16Ty;
   llvm::Type *Int32Ty;
   llvm::Type *Int64Ty;
+  llvm::Constant *Int1Zero;
+  llvm::Constant *Int8Zero;
+  llvm::Constant *Int16Zero;
   llvm::Constant *Int32Zero;
+  llvm::Constant *Int64Zero;
+
+
 
 public:
   CGModule(ASTContext &ASTCtx, llvm::Module *M);
@@ -46,6 +54,9 @@ public:
                     TypeDeclaration *Type);
 
   llvm::Type *convertType(TypeDeclaration *Ty);
+    
+  llvm::Constant *getDefaultConstant(llvm::Type *T);
+    
   std::string mangleName(Decl *D);
 
   llvm::GlobalObject *getGlobal(Decl *);
