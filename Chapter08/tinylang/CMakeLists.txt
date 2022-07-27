@@ -28,6 +28,10 @@ configure_file(
   ${CMAKE_CURRENT_SOURCE_DIR}/include/tinylang/Basic/Version.inc.in
   ${CMAKE_CURRENT_BINARY_DIR}/include/tinylang/Basic/Version.inc)
 
+add_definitions(${LLVM_DEFINITIONS})
+
+include_directories(SYSTEM ${LLVM_INCLUDE_DIRS})
+
 include(AddTinylang)
 
 include_directories(BEFORE

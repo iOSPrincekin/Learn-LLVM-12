@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.4.3)
+set(CMAKE_CXX_STANDARD 17)
 project(countirpass)
 
 find_package(LLVM REQUIRED CONFIG)
