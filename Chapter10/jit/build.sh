@@ -64,8 +64,16 @@ ninja -j12
 ninja install
 elif [ "$BUILD_TYPE" = "Xcode" ]; then 
 
-cmake -G $BUILD_TYPE -DLLVM_TARGETS_TO_BUILD="ARM;RISCV;X86" -DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=MyRISCV -DCMAKE_BUILD_TYPE=Debug \
--DLLVM_ENABLE_PROJECTS=clang \
+cmake -G $BUILD_TYPE -DCMAKE_BUILD_TYPE=Release \
+-T buildsystem=1 \
+-DLLVM_APPEND_VC_REV=on -DLLDB_USE_SYSTEM_DEBUGSERVER=YES -DLLVM_CREATE_XCODE_TOOLCHAIN=on \
+-DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON \
+-DLLVM_ENABLE_PROJECTS='clang' \
+-DLLVM_ENABLE_RUNTIMES='compiler-rt;libcxx' \
+-DLLVM_ENABLE_LIBCXX=ON \
+-DCLANG_DEFAULT_CXX_STDLIB='libc++' \
+-DLIBCXX_ENABLE_SHARED=YES \
+-DLIBCXX_ENABLE_STATIC=NO \
 -DCMAKE_INSTALL_PREFIX=${llvm_install} \
 ${llvm_project}/llvm
 
@@ -84,7 +92,7 @@ fi
 # ================================ build Target 开始 =========================
 
 
-build_target=tinylang
+build_target=jit
 
 cd ${BASEDIR}
 

@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 3.13.4)
 set(CMAKE_CXX_STANDARD 17)
 
-project ("JIT2")
+project ("KaleidoscopeJIT")
 
 find_package(LLVM REQUIRED CONFIG)
 list(APPEND CMAKE_MODULE_PATH ${LLVM_DIR})
@@ -21,6 +21,6 @@ if(LLVM_COMPILER_IS_GCC_COMPATIBLE)
   endif()
 endif()
 
-add_executable(JIT JIT.cpp)
+add_executable(KaleidoscopeJIT KaleidoscopeJIT.cpp)
 include_directories(${CMAKE_SOURCE_DIR})
-target_link_libraries(JIT ${llvm_libs})
+target_link_libraries(KaleidoscopeJIT ${llvm_libs})

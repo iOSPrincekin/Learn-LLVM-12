@@ -64,7 +64,7 @@ ninja -j12
 ninja install
 elif [ "$BUILD_TYPE" = "Xcode" ]; then 
 
-cmake -G $BUILD_TYPE -DLLVM_TARGETS_TO_BUILD="ARM;RISCV;X86" -DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=MyRISCV -DCMAKE_BUILD_TYPE=Debug \
+cmake -G $BUILD_TYPE -DCMAKE_BUILD_TYPE=Release \
 -DLLVM_ENABLE_PROJECTS=clang \
 -DCMAKE_INSTALL_PREFIX=${llvm_install} \
 ${llvm_project}/llvm
@@ -84,7 +84,7 @@ fi
 # ================================ build Target 开始 =========================
 
 
-build_target=tinylang
+build_target=toy
 
 cd ${BASEDIR}
 

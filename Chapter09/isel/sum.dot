@@ -1,0 +1,34 @@
+digraph "dag-combine1 input for sum:" {
+	rankdir="BT";
+	label="dag-combine1 input for sum:";
+
+	Node0x7f7df07065f8 [shape=record,shape=Mrecord,label="{EntryToken|t0|{<d0>ch}}"];
+	Node0x7f7df0857e00 [shape=record,shape=Mrecord,label="{Register %0|t1|{<d0>i32}}"];
+	Node0x7f7df0857e68 [shape=record,shape=Mrecord,label="{{<s0>0|<s1>1}|CopyFromReg|t2|{<d0>i32|<d1>ch}}"];
+	Node0x7f7df0857e68:s0 -> Node0x7f7df07065f8:d0[color=blue,style=dashed];
+	Node0x7f7df0857e68:s1 -> Node0x7f7df0857e00:d0;
+	Node0x7f7df0857ed0 [shape=record,shape=Mrecord,label="{{<s0>0}|truncate|t3|{<d0>i16}}"];
+	Node0x7f7df0857ed0:s0 -> Node0x7f7df0857e68:d0;
+	Node0x7f7df0857f38 [shape=record,shape=Mrecord,label="{Register %1|t4|{<d0>i32}}"];
+	Node0x7f7df0857fa0 [shape=record,shape=Mrecord,label="{{<s0>0|<s1>1}|CopyFromReg|t5|{<d0>i32|<d1>ch}}"];
+	Node0x7f7df0857fa0:s0 -> Node0x7f7df07065f8:d0[color=blue,style=dashed];
+	Node0x7f7df0857fa0:s1 -> Node0x7f7df0857f38:d0;
+	Node0x7f7df0858008 [shape=record,shape=Mrecord,label="{{<s0>0}|truncate|t6|{<d0>i16}}"];
+	Node0x7f7df0858008:s0 -> Node0x7f7df0857fa0:d0;
+	Node0x7f7df0858070 [shape=record,shape=Mrecord,label="{{<s0>0|<s1>1}|add|t7|{<d0>i16}}"];
+	Node0x7f7df0858070:s0 -> Node0x7f7df0857ed0:d0;
+	Node0x7f7df0858070:s1 -> Node0x7f7df0858008:d0;
+	Node0x7f7df08580d8 [shape=record,shape=Mrecord,label="{TargetConstant\<0\>|t8|{<d0>i32}}"];
+	Node0x7f7df0858140 [shape=record,shape=Mrecord,label="{Register $ax|t9|{<d0>i16}}"];
+	Node0x7f7df08581a8 [shape=record,shape=Mrecord,label="{{<s0>0|<s1>1|<s2>2}|CopyToReg|t10|{<d0>ch|<d1>glue}}"];
+	Node0x7f7df08581a8:s0 -> Node0x7f7df07065f8:d0[color=blue,style=dashed];
+	Node0x7f7df08581a8:s1 -> Node0x7f7df0858140:d0;
+	Node0x7f7df08581a8:s2 -> Node0x7f7df0858070:d0;
+	Node0x7f7df0858210 [shape=record,shape=Mrecord,label="{{<s0>0|<s1>1|<s2>2|<s3>3}|X86ISD::RET_FLAG|t11|{<d0>ch}}"];
+	Node0x7f7df0858210:s0 -> Node0x7f7df08581a8:d0[color=blue,style=dashed];
+	Node0x7f7df0858210:s1 -> Node0x7f7df08580d8:d0;
+	Node0x7f7df0858210:s2 -> Node0x7f7df0858140:d0;
+	Node0x7f7df0858210:s3 -> Node0x7f7df08581a8:d1[color=red,style=bold];
+	Node0x0[ plaintext=circle, label ="GraphRoot"];
+	Node0x0 -> Node0x7f7df0858210:d0[color=blue,style=dashed];
+}
