@@ -67,6 +67,7 @@ elif [ "$BUILD_TYPE" = "Xcode" ]; then
 cmake -G $BUILD_TYPE -DLLVM_TARGETS_TO_BUILD="ARM;RISCV;Sparc;X86" -DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=MyRISCV -DCMAKE_BUILD_TYPE=Debug \
 -DLLVM_ENABLE_PROJECTS=clang \
 -DCMAKE_INSTALL_PREFIX=${llvm_install} \
+-DLLVM_BUILD_LLVM_DYLIB=true \
 ${llvm_project}/llvm
 
 make -j12
