@@ -8,7 +8,7 @@
 test:                                   # @test
 	.cfi_startproc
 # %bb.0:
-	addi	a0, zero, 1
+	add	a0, a0, a1
 	ret
 .Lfunc_end0:
 	.size	test, .Lfunc_end0-test

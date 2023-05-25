@@ -1,0 +1,18 @@
+digraph "dag-combine1 input for main:entry" {
+	rankdir="BT";
+	label="dag-combine1 input for main:entry";
+
+	Node0x7f8e9bf17df8 [shape=record,shape=Mrecord,label="{EntryToken|t0|{<d0>ch}}"];
+	Node0x7f8e9c0b6400 [shape=record,shape=Mrecord,label="{Constant\<6\>|t1|{<d0>i32}}"];
+	Node0x7f8e9c0b6468 [shape=record,shape=Mrecord,label="{Register $x10|t2|{<d0>i32}}"];
+	Node0x7f8e9c0b64d0 [shape=record,shape=Mrecord,label="{{<s0>0|<s1>1|<s2>2}|CopyToReg|t3|{<d0>ch|<d1>glue}}"];
+	Node0x7f8e9c0b64d0:s0 -> Node0x7f8e9bf17df8:d0[color=blue,style=dashed];
+	Node0x7f8e9c0b64d0:s1 -> Node0x7f8e9c0b6468:d0;
+	Node0x7f8e9c0b64d0:s2 -> Node0x7f8e9c0b6400:d0;
+	Node0x7f8e9c0b6538 [shape=record,shape=Mrecord,label="{{<s0>0|<s1>1|<s2>2}|RISCVISD::RET_FLAG|t4|{<d0>ch}}"];
+	Node0x7f8e9c0b6538:s0 -> Node0x7f8e9c0b64d0:d0[color=blue,style=dashed];
+	Node0x7f8e9c0b6538:s1 -> Node0x7f8e9c0b6468:d0;
+	Node0x7f8e9c0b6538:s2 -> Node0x7f8e9c0b64d0:d1[color=red,style=bold];
+	Node0x0[ plaintext=circle, label ="GraphRoot"];
+	Node0x0 -> Node0x7f8e9c0b6538:d0[color=blue,style=dashed];
+}
